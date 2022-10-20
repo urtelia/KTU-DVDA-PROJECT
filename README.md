@@ -2,8 +2,7 @@
 
 Sukurkite duomenų produktą - analitinę aplikaciją, skirtą banko paskolos įvertinimui mašininio mokymosi algoritmų pagalba.
 
-![Data Product](/slides/img/data_product.png){width=50}
-
+<img src="/slides/img/data_product.png" width="500">
 
 #### Projekte ugdomi gebėjimai  
 
@@ -56,8 +55,7 @@ sum = 4
 
 **Top 3 komandos/dalyviai gaus maksimalų įvertinimą**
 
-![Vertinimo sistema](/slides/img/vertinimas.png){width=50}
-
+<img src="/slides/img/vertinimas.png" width="500">
 
 # Duomenys
 
