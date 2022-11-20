@@ -1,7 +1,7 @@
 library(h2o)
 library(tidyverse)
 h2o.init()
-
+#testuoju git
 df <- h2o.importFile("../../../project/1-data/train_data.csv")
 df
 class(df)
