@@ -1,7 +1,7 @@
 #install.packages("tidyverse")
 
 library(tidyverse)
-
+#test
 data <- read_csv("../../../project/1-data/1-sample_data.csv")
 
 select(data, y)
