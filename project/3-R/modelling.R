@@ -1,9 +1,9 @@
 library(h2o)
 library(tidyverse)
 h2o.init()
+max_mem_size=12000
 
-
-df <- h2o.importFile("project/1-data/train_data.csv")
+df <- h2o.importFile("./project/1-data/train_data.csv")
 
 df
 class(df)
@@ -25,13 +25,13 @@ aml <- h2o.automl(x = x,
                   y = y,
                   training_frame = train,
                   validation_frame = valid,
-                  max_runtime_secs = 200)
+                  max_runtime_secs = 3600)
 
 aml@leaderboard
 
 model <- aml@leader
 
-model <- h2o.getModel("GBM_1_AutoML_1_20221121_221738")
+model <- h2o.getModel("StackedEnsemble_BestOfFamily_2_AutoML_1_20221123_11847")
 h2o.varimp_plot(model)
 h2o.performance(model, train = TRUE)
 perf_valid <- h2o.performance(model, valid = TRUE)
