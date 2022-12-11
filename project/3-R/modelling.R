@@ -1,15 +1,15 @@
 library(h2o)
 library(tidyverse)
-h2o.init()
-max_mem_size=12000
+h2o.init(
+  max_mem_size = "2g"
+)
+#max_mem_size=12000
 
 df <- h2o.importFile("./project/1-data/train_data.csv")
-
 df
 class(df)
 class(data)
 summary(df)
-
 y <- "y"
 x <- setdiff(names(df), c(y, "id"))
 df$y <- as.factor(df$y)
@@ -25,13 +25,14 @@ aml <- h2o.automl(x = x,
                   y = y,
                   training_frame = train,
                   validation_frame = valid,
-                  max_runtime_secs = 3600)
+                  exclude_algos = c("GLM", "DeepLearning", "GBM"),
+                  max_runtime_secs = 600)
 
 aml@leaderboard
 
 model <- aml@leader
 
-model <- h2o.getModel("StackedEnsemble_BestOfFamily_2_AutoML_1_20221123_11847")
+#model <- h2o.getModel("StackedEnsemble_BestOfFamily_2_AutoML_1_20221211_134359")
 h2o.varimp_plot(model)
 h2o.performance(model, train = TRUE)
 perf_valid <- h2o.performance(model, valid = TRUE)
@@ -53,13 +54,13 @@ predictions %>%
   as_tibble() %>%
   mutate(id = row_number(), y = p0) %>%
   select(id, y) %>%
-  write_csv("./project/5-predictions/predictions1.csv")
+  write_csv("./project/5-predictions/predictions4.csv")
 
 ### ID, Y
 
-h2o.saveModel(model, "./project/4-model/", filename = "my_model")
+h2o.saveModel(model, "./project/4-model/", filename = "my_modeldr")
 
-model <- h2o.loadModel("./project/4-model/my_model")
+model <- h2o.loadModel("./project/4-model/my_model84")
 
 
 h2o.shutdown()
