@@ -1,7 +1,7 @@
 library(h2o)
 library(tidyverse)
 h2o.init(
-  max_mem_size = "2g"
+  max_mem_size = "4g"
 )
 #max_mem_size=12000
 
@@ -61,6 +61,28 @@ predictions %>%
 h2o.saveModel(model, "./project/4-model/", filename = "my_modeldr")
 
 model <- h2o.loadModel("./project/4-model/my_model84")
+
+# Xgboost
+xgb <- h2o.xgboost(x = x,
+                   y = y,
+                   model_id = "XGBoost_1_AutoML_1_20221125_91712",
+                   training_frame = train,
+                   validation_frame = valid,
+                   booster = "dart",
+                   stopping_rounds = 3, 
+                   stopping_metric = "AUC",
+                   keep_cross_validation_models = TRUE,
+                   distribution = 'bernoulli',
+                   categorical_encoding = "OneHotInternal",
+                   ntrees = 50,
+                   max_depth = 17,
+                   min_rows = 2,
+                   nfolds = 5,
+                   dmatrix_type = "dense",
+                   backend = "cpu",
+                   seed = "-0001")
+
+perf <- h2o.performance(xgb, newdata = test)
 
 
 h2o.shutdown()
