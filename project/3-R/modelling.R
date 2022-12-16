@@ -84,5 +84,9 @@ xgb <- h2o.xgboost(x = x,
 
 perf <- h2o.performance(xgb, newdata = test)
 
+h2o.saveModel(xgb, "./project/4-model/", filename = "my_model85_final")
+
+
+model <- h2o.loadModel("./project/4-model/my_model85_final")
 
 h2o.shutdown()
