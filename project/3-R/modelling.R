@@ -74,7 +74,7 @@ xgb <- h2o.xgboost(x = x,
                    keep_cross_validation_models = TRUE,
                    distribution = 'bernoulli',
                    categorical_encoding = "OneHotInternal",
-                   ntrees = 50,
+                   ntrees = 70,
                    max_depth = 17,
                    min_rows = 2,
                    nfolds = 5,
@@ -84,9 +84,17 @@ xgb <- h2o.xgboost(x = x,
 
 perf <- h2o.performance(xgb, newdata = test)
 
-h2o.saveModel(xgb, "./project/4-model/", filename = "my_model85_final")
+predictions <- h2o.predict(xgb, test_data)
+
+predictions %>%
+  as_tibble() %>%
+  mutate(id = row_number(), y = p0) %>%
+  select(id, y) %>%
+  write_csv("./project/5-predictions/predictions_last.csv")
+
+h2o.saveModel(xgb, "./project/4-model/", filename = "my_model85_last")
 
 
-model <- h2o.loadModel("./project/4-model/my_model85_final")
+model <- h2o.loadModel("./project/4-model/my_model85_last")
 
 h2o.shutdown()
