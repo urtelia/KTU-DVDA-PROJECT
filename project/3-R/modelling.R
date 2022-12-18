@@ -3,16 +3,20 @@ library(tidyverse)
 h2o.init(
   max_mem_size = "4g"
 )
-#max_mem_size=12000
 
 df <- h2o.importFile("./project/1-data/train_data.csv")
+
+# Susipažiname su duomenimis ir paleidžiame automl
 df
 class(df)
 class(data)
 summary(df)
+
 y <- "y"
 x <- setdiff(names(df), c(y, "id"))
+
 df$y <- as.factor(df$y)
+
 summary(df)
 
 splits <- h2o.splitFrame(df, c(0.6,0.2), seed=123)
@@ -32,18 +36,23 @@ aml@leaderboard
 
 model <- aml@leader
 
-#model <- h2o.getModel("StackedEnsemble_BestOfFamily_2_AutoML_1_20221211_134359")
+# Iš automl sąrašo pasirenkame geriausią modelį ir pritaikome prognozavimui
+model <- h2o.getModel("StackedEnsemble_BestOfFamily_2_AutoML_1_20221211_134359")
+
 h2o.varimp_plot(model)
+
 h2o.performance(model, train = TRUE)
+
 perf_valid <- h2o.performance(model, valid = TRUE)
+
 h2o.auc(perf_valid)
+
 h2o.performance(model, newdata = test)
 
 h2o.varimp_plot(model)
 
 h2o.auc(perf_valid)
 plot(perf_valid, type = "roc")
-
 
 test_data <- h2o.importFile("./project/1-data/test_data.csv")
 h2o.performance(model, newdata = test_data)
@@ -56,13 +65,16 @@ predictions %>%
   select(id, y) %>%
   write_csv("./project/5-predictions/predictions4.csv")
 
-### ID, Y
+# Išsaugome turimą modelį, kaip "my_model84Æ
 
-h2o.saveModel(model, "./project/4-model/", filename = "my_modeldr")
+h2o.saveModel(model, "./project/4-model/", filename = "my_model84")
 
+# Užsikrauname prieš tai naudotą modelį, pasirenkame XGBoost automl atrinktą modelį
+# ir jį tobuliname.
 model <- h2o.loadModel("./project/4-model/my_model84")
 
-# Xgboost
+modeld@parameters
+
 xgb <- h2o.xgboost(x = x,
                    y = y,
                    model_id = "XGBoost_1_AutoML_1_20221125_91712",
@@ -92,6 +104,7 @@ predictions %>%
   select(id, y) %>%
   write_csv("./project/5-predictions/predictions_last.csv")
 
+# Išsaugome gautą XGBoost modelį.
 h2o.saveModel(xgb, "./project/4-model/", filename = "my_model85_last")
 
 
