@@ -110,4 +110,7 @@ h2o.saveModel(xgb, "./project/4-model/", filename = "my_model85_last")
 
 model <- h2o.loadModel("./project/4-model/my_model85_last")
 
+model@parameters
+
+
 h2o.shutdown()
